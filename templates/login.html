@@ -1,0 +1,28 @@
+{% include "header.html" %}
+ 
+<div class="container Login-container shadow p-3 mb-5 bg-white rounded">
+  {% with messages=get_flashed_messages() %}
+  <div class="alert alert-danger">
+
+    {{ messages[0] }}
+  </div>
+  {% endwith %}
+<div class="row">
+   <h1>Log In</h1>
+</div>
+<div class="row">
+<form action='/login' method='POST'>
+   <div class="form-group">
+     <label for="exampleInputEmail1">User Name</label>
+     <input type="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username" name='username'>
+     <small id="emailHelp" class="form-text text-muted">We'll never share your info with anyone else.</small>
+   </div>
+   <div class="form-group">
+     <label for="exampleInputPassword1">Password</label>
+     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name='password'>
+   </div>
+   <button type="submit" class="btn btn-primary">Log Me In</button>
+ </form>
+</div>
+</div>
+{% include "footer.html" %}

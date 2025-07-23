@@ -1,0 +1,20 @@
+{% include "header.html" %}
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 heading">
+      <div class="row ">
+        <h1>Locate Nearest EV Charging Stations</h1>
+        <p>Power Up Your Electric Vehicle with Ease</p>
+      </div>
+      <div class="row charging-btn">
+        <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{{ url_for( 'location') }}';">Find Charging Stations</button>
+      </div>
+    </div>
+    <div class="col-lg-7 Charging-img">
+      <img src="https://img.c3controls.com/c3controls-Electric-car-public-charger-stations-4.gif?h=500&fit=fill" alt="Charging Station Gif">
+    </div>
+  </div>
+</div>
+{% include "footer.html" %}

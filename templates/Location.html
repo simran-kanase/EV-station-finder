@@ -1,0 +1,94 @@
+{% include "header.html" %}
+
+
+<div class="container-fluid location">
+  <div class="row">
+
+    {% if nearLocationsLen==0: %}
+    <div class="col-lg-12 loc-1">
+      {% else %}
+      <div class="col-lg-6 loc-2">
+        {% endif %}
+        <div class="row">
+          <div class="col-lg-6">
+            <h3>Choose Your Location</h3>
+          </div>
+          <div class="col-lg-6">
+            <form action="/location" method="POST">
+              <button type="submit" class="btn btn-primary btn-lg"
+                onclick="window.location.href='{{ url_for( 'location') }}';">Find The Station</button>
+            </form>
+          </div>
+
+        </div>
+        <div class="row">
+          <div id="map"></div>
+        </div>
+
+      </div>
+      {% if nearLocationsLen!=0: %}
+      <div class="col-lg-6 location-data">
+        <h3>Nearest Locations</h3>
+        {% for i in nearLocations: %}
+        <div class="container shadow p-2 mb-3 bg-white rounded">
+          <div class="row">
+            <div class="col-lg-10">
+              <h4>{{i[1]}}</h4>
+              <p>{{i[0]}}</p>
+            </div>
+            <div class="col-lg-2 Direct">
+              <form action="/map" method="POST">
+                <input type="hidden" id="custId" name="lat" value={{i[3]}}>
+                <input type="hidden" id="custId" name="long" value={{i[4]}}>
+                <button type="submit" class="btn btn-primary btn-md">Direction</button>
+              </form>
+            </div>
+          </div>
+  
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    var map = L.map('map').setView([21.538369, 78.706055], 5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    function onMapClick(e) {
+      alert("You clicked the map at " + e.latlng);
+    }
+
+    map.on('click', onMapClick);
+    var popup = L.popup();
+
+    function onMapClick(e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked this Location at " + e.latlng.toString())
+        .openOn(map);
+    }
+
+
+    function sendinfo(e) {
+      let userinfo = {
+        'values': '' + e.latlng.toString()
+      }
+      const request = new XMLHttpRequest()
+      request.open('POST', `/process/${JSON.stringify(userinfo)}`)
+      request.onload = () => {
+        const flaskMessage = request.responseText
+        console.log(flaskMessage)
+      }
+      request.send()
+    }
+    map.on('click', onMapClick);
+    map.on('click', sendinfo);
+  </script>
+  {% include "footer.html" %}
